@@ -1,15 +1,14 @@
-
 services:
-#  news-db:
-#    image: postgres:14-alpine
-#    container_name: notification
-#    ports:
-#      - "6542:5432"
-#    environment:
-#      - POSTGRES_DB=notification
-#      - POSTGRES_USER=postgres
-#      - POSTGRES_PASSWORD=postgres
-#      - PGDATA=/var/lib/postgresql/data1
+  library-db:
+    image: postgres:14-alpine
+    container_name: library
+    ports:
+      - "6542:5432"
+    environment:
+      - POSTGRES_DB=library
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - PGDATA=/var/lib/postgresql/data1
 
   zookeeper:
     image: confluentinc/cp-zookeeper:latest

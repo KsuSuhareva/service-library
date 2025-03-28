@@ -18,12 +18,10 @@ import ru.itq.library_service.service.SubscriptionService;
 @RequiredArgsConstructor
 @Validated
 public class SubscriptionController {
-    private static final String FIO_PATTERN = "^(([a-zA-Zа-яА-Я-])+\\s([a-zA-Zа-яА-Я-])+$)" +
-            "|^(([a-zA-Zа-яА-Я-])+\\s([a-zA-Zа-яА-Я-])+\\s([a-zA-Zа-яА-Я-])+$)";
     private final SubscriptionService subscriptionService;
 
     @GetMapping("/by-user-full-name")
-    public ResponseEntity<Subscription> getByUserFullName(@RequestParam @Valid @Pattern(regexp = FIO_PATTERN) String userFullName) {
+    public ResponseEntity<Subscription> getByUserFullName(@RequestParam  String userFullName) {
         return new ResponseEntity<>(subscriptionService.findByUserFullName(userFullName), HttpStatus.OK);
     }
 }
