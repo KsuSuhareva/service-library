@@ -26,4 +26,16 @@ public class LibraryAdviceHandler {
         log.warn("Catch EntityNotFoundException: {}", errorMessage);
         return new ResponseEntity<>(errorMessage, HttpStatus.NOT_FOUND);
     }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ErrorMessage> handleConstraintViolationException(ConstraintViolationException ex) {
+        String error = ex.getConstraintViolations()
+                .stream()
+                .map(violation -> violation.getPropertyPath() + ": " + violation.getMessage())
+                .collect(Collectors.joining("; "));
+        ErrorMessage errorMessage = new ErrorMessage(error, HttpStatus.NOT_FOUND);
+        log.warn("Catch ConstraintViolationException: {}", error);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+    }
 }

@@ -20,7 +20,7 @@ import java.util.List;
 public class AccountingBookController {
     private final AccountingBookService accountingBookService;
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<HttpStatus> publishToQueue(@RequestBody List<BookRecord> records) {
         accountingBookService.publishToQueue(records);
         return new ResponseEntity<>(HttpStatus.OK);
