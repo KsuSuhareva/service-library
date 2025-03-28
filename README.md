@@ -21,7 +21,7 @@ Library Service — это сервис для управления книгам
 git clone https://github.com/your-repo/library-service.git
 cd library-service
 
-## 📦 2. Запустить
+### 📦 2. Запустить
 выполнить команду из корневого каталага docker-compose up
 
 
