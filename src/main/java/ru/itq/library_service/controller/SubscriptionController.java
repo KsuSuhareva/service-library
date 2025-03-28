@@ -1,6 +1,5 @@
 package ru.itq.library_service.controller;
 
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,8 +19,8 @@ import ru.itq.library_service.service.SubscriptionService;
 public class SubscriptionController {
     private final SubscriptionService subscriptionService;
 
-    @GetMapping("/by-user-full-name")
-    public ResponseEntity<Subscription> getByUserFullName(@RequestParam  String userFullName) {
-        return new ResponseEntity<>(subscriptionService.findByUserFullName(userFullName), HttpStatus.OK);
+    @GetMapping
+    public ResponseEntity<Subscription> getByUserName(@RequestParam @Pattern(regexp = "(.|\\s)*\\S(.|\\s)*") String username) {
+        return new ResponseEntity<>(subscriptionService.findByUserFullName(username), HttpStatus.OK);
     }
 }

@@ -29,11 +29,13 @@ public class LibraryScheduler {
                 .map(accountingBook -> accountingBook.getSubscription().getUserEmail())
                 .toList();
 
-        Message message = new Message();
-        message.setTitle("Напоминание: Верните книгу!");
-        message.setText("Вы держите книгу более 20 дней. Пожалуйста, верните её в библиотеку.");
-        message.setRecipientContacts(emails);
+        Message message = Message.builder()
+                .title("Напоминание: Верните книгу!")
+                .text("Вы держите книгу более 20 дней. Пожалуйста, верните её в библиотеку.")
+                .recipientContacts(emails)
+                .build();
+
         sender.send(message);
-        log.info("Утправка уведомлений прошла успешно");
+        log.info("Отправка уведомлений прошла успешно");
     }
 }

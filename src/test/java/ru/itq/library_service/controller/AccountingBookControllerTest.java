@@ -24,7 +24,7 @@ class AccountingBookControllerTest extends IntegrationTest {
                 "Властелин колец", "Дж. Р. Р. Толкин", LocalDateTime.now(), LocalDateTime.now().toLocalDate(), null));
 
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/accountingBooks/pushToQueue")
+        mockMvc.perform(MockMvcRequestBuilders.post("/accountingbooks")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(records)))
                 .andExpect(status().isOk())

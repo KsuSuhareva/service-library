@@ -1,0 +1,64 @@
+spring:
+  application:
+    name: library-service
+
+  datasource:
+    url: jdbc:postgresql://localhost:6542/library
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  liquibase:
+    change-log: classpath:db.changelog/db.changelog-master.yaml
+    enabled: true
+
+  mail:
+    host: mail.itq-group.com
+    port: 587
+    username: chatbot@itq-group.com
+    password: tU4TfKCnvZ-NCC8xsHqzwC0-e
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+      mail.smtp.ssl.enable: false
+      mail.smtp.starttls.required: true
+      mail.smtp.ssl.trust: mail.itq-group.com
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: library-group
+      auto-offset-reset: earliest
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    listener:
+      missing-topics-fatal: false
+
+mail:
+  from: chatbot@itq-group.com
+
+notifications:
+  cron: "0 0 9 * * *"
+
+bach:
+  size: 50
+
+publish:
+  record:
+    topic: publish-record
+
+listen:
+  record:
+    topic: listen-record

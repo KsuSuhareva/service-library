@@ -3,6 +3,7 @@ package ru.itq.library_service.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,11 +15,12 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/accountingBooks")
+@RequestMapping("/accountingbooks")
+@Validated
 public class AccountingBookController {
     private final AccountingBookService accountingBookService;
 
-    @PostMapping("/pushToQueue")
+    @PostMapping()
     public ResponseEntity<HttpStatus> publishToQueue(@RequestBody List<BookRecord> records) {
         accountingBookService.publishToQueue(records);
         return new ResponseEntity<>(HttpStatus.OK);
