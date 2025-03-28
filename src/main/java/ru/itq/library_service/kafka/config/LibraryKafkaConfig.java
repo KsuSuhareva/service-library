@@ -36,7 +36,7 @@ public class LibraryKafkaConfig {
 
         props.put(ConsumerConfig.FETCH_MIN_BYTES_CONFIG, 50000);
         props.put(ConsumerConfig.FETCH_MAX_BYTES_CONFIG, 1048576);
-        props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 50);
+        props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, properties.getBachSize());
         props.put(ConsumerConfig.FETCH_MAX_WAIT_MS_CONFIG, 5000);
 
 

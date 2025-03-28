@@ -15,6 +15,7 @@ import ru.itq.library_service.repository.AccountingBookRepository;
 import ru.itq.library_service.service.AccountingBookService;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +23,8 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class AccountingBookServiceImpl implements AccountingBookService {
+    private static final String FIND_BOOK_SQL = "SELECT b FROM Book b WHERE b.title = :title AND b.author = :author AND b.publishedDate = :publishedDate";
+    private static final String FIND_SUBSCRIPTION_SQL = "SELECT s FROM Subscription s WHERE s.userFullName = :fullName";
     private static final Integer ALLOWED_PERIOD_DAYS = 20;
     private final LibraryProperties properties;
     private final AccountingBookRepository accountingBookRepository;
@@ -60,9 +63,7 @@ public class AccountingBookServiceImpl implements AccountingBookService {
 
     private Book findBookCacheOrBase(BookRecord record, Map<String, Book> bookCache) {
         return bookCache.computeIfAbsent(record.getBookTitle(), title -> {
-            return entityManager.createQuery(
-                            "SELECT b FROM Book b WHERE b.title = :title AND b.author = :author AND b.publishedDate = :publishedDate",
-                            Book.class)
+            return entityManager.createQuery(FIND_BOOK_SQL, Book.class)
                     .setParameter("title", record.getBookTitle())
                     .setParameter("author", record.getBookAuthor())
                     .setParameter("publishedDate", record.getBookPublishedDate())
@@ -80,9 +81,7 @@ public class AccountingBookServiceImpl implements AccountingBookService {
 
     private Subscription findSubscriptionCacheOrBase(BookRecord record, Book newBook, Map<String, Subscription> subscriptionCache) {
         return subscriptionCache.computeIfAbsent(record.getUserFullName(), login -> {
-            return entityManager.createQuery(
-                            "SELECT s FROM Subscription s WHERE s.userFullName = :fullName",
-                            Subscription.class)
+            return entityManager.createQuery(FIND_SUBSCRIPTION_SQL, Subscription.class)
                     .setParameter("fullName", record.getUserFullName())
                     .setMaxResults(1)
                     .getResultStream()
@@ -90,6 +89,9 @@ public class AccountingBookServiceImpl implements AccountingBookService {
                     .orElseGet(() -> {
                         Subscription newSubscription = new Subscription(login, record.getUserFullName(), record.getUserEmail(), record.isBorrowAllowed());
                         List<Book> books = newSubscription.getBooks();
+                        if (books == null) {
+                            books = new ArrayList<>();
+                        }
                         if (!books.contains(newBook)) {
                             books.add(newBook);
                             newSubscription.setBooks(books);

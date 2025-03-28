@@ -18,4 +18,6 @@ public class LibraryProperties {
     private String publishRecordTopic;
     @Value("${listen.record.topic}")
     private String listenRecordTopic;
+    @Value("${bach.size}")
+    private String bachSize;
 }

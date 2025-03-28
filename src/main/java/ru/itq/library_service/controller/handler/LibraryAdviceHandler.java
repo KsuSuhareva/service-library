@@ -22,31 +22,8 @@ public class LibraryAdviceHandler {
     @ExceptionHandler(EntityNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<ErrorMessage> handlerEntityNotFoundException(EntityNotFoundException exception) {
-        ErrorMessage errorMessage = new ErrorMessage(exception.toString(), HttpStatus.NOT_FOUND);
+        ErrorMessage errorMessage = new ErrorMessage(exception.getMessage(), HttpStatus.NOT_FOUND);
         log.warn("Catch EntityNotFoundException: {}", errorMessage);
         return new ResponseEntity<>(errorMessage, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<String> handleValidationExceptions(MethodArgumentNotValidException exception) {
-        String errorMessage = exception.getBindingResult()
-                .getAllErrors()
-                .stream()
-                .map(DefaultMessageSourceResolvable::getDefaultMessage)
-                .collect(Collectors.joining(", "));
-        log.warn("Catch MethodArgumentNotValidException: {}", errorMessage);
-        return new ResponseEntity<>("Validation failed: " + errorMessage, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(ConstraintViolationException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<String> handleConstraintViolationException(ConstraintViolationException ex) {
-        Set<String> errorMessages = ex.getConstraintViolations()
-                .stream()
-                .map(ConstraintViolation::getMessage)
-                .collect(Collectors.toSet());
-        String errorMessage = String.join(", ", errorMessages);
-        return new ResponseEntity<>("Validation failed: " + errorMessage, HttpStatus.BAD_REQUEST);
     }
 }

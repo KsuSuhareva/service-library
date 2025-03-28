@@ -20,7 +20,7 @@ import java.util.UUID;
 public class LibraryKafkaPublisher {
     private final LibraryProperties properties;
     private final KafkaTemplate<String, String> kafkaTemplate;
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper;
 
     public void publish(Object message, String topicName) {
         try {
