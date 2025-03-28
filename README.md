@@ -22,6 +22,7 @@ git clone https://github.com/your-repo/library-service.git
 cd library-service
 
 ### 📦 2. Запустить
+```bash
 выполнить команду из корневого каталага docker-compose up
-
+---
 
