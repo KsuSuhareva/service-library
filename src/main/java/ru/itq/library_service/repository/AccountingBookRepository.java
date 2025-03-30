@@ -12,5 +12,5 @@ import java.util.List;
 @Repository
 public interface AccountingBookRepository extends JpaRepository<AccountingBook, Long> {
     @Query("SELECT ab FROM AccountingBook ab JOIN FETCH ab.subscription JOIN FETCH ab.book WHERE ab.returnedDate IS NULL AND ab.borrowedDate < :date")
-    List<AccountingBook> findByReturnedDateIsNullAndBorrowedDateBefore(@Param("date") LocalDate date);
+    List<AccountingBook> findOverdueBooks(@Param("date") LocalDate date);
 }

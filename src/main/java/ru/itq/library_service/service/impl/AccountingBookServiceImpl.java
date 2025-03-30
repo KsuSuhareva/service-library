@@ -34,7 +34,7 @@ public class AccountingBookServiceImpl implements AccountingBookService {
 
     @Override
     public List<AccountingBook> findOverdueBooks() {
-        return accountingBookRepository.findByReturnedDateIsNullAndBorrowedDateBefore(LocalDate.now().minusDays(ALLOWED_PERIOD_DAYS));
+        return accountingBookRepository.findOverdueBooks(LocalDate.now().minusDays(ALLOWED_PERIOD_DAYS));
     }
 
     @Override
@@ -50,8 +50,8 @@ public class AccountingBookServiceImpl implements AccountingBookService {
         Map<String, Subscription> subscriptionCache = new HashMap<>();
 
         for (BookRecord record : records) {
-            Book book = findBookCacheOrBase(record, bookCache);
-            Subscription subscription = findSubscriptionCacheOrBase(record, book, subscriptionCache);
+            Book book = findBookFromCacheOrBase(record, bookCache);
+            Subscription subscription = findSubscriptionFromCacheOrBase(record, book, subscriptionCache);
             saveAccountingBook(book, subscription, record);
         }
         entityManager.flush();
@@ -61,7 +61,7 @@ public class AccountingBookServiceImpl implements AccountingBookService {
         subscriptionCache.clear();
     }
 
-    private Book findBookCacheOrBase(BookRecord record, Map<String, Book> bookCache) {
+    private Book findBookFromCacheOrBase(BookRecord record, Map<String, Book> bookCache) {
         return bookCache.computeIfAbsent(record.getBookTitle(), title -> {
             return entityManager.createQuery(FIND_BOOK_SQL, Book.class)
                     .setParameter("title", record.getBookTitle())
@@ -79,7 +79,7 @@ public class AccountingBookServiceImpl implements AccountingBookService {
     }
 
 
-    private Subscription findSubscriptionCacheOrBase(BookRecord record, Book newBook, Map<String, Subscription> subscriptionCache) {
+    private Subscription findSubscriptionFromCacheOrBase(BookRecord record, Book newBook, Map<String, Subscription> subscriptionCache) {
         return subscriptionCache.computeIfAbsent(record.getUserFullName(), login -> {
             return entityManager.createQuery(FIND_SUBSCRIPTION_SQL, Subscription.class)
                     .setParameter("fullName", record.getUserFullName())
@@ -87,19 +87,24 @@ public class AccountingBookServiceImpl implements AccountingBookService {
                     .getResultStream()
                     .findFirst()
                     .orElseGet(() -> {
-                        Subscription newSubscription = new Subscription(login, record.getUserFullName(), record.getUserEmail(), record.isBorrowAllowed());
-                        List<Book> books = newSubscription.getBooks();
-                        if (books == null) {
-                            books = new ArrayList<>();
-                        }
-                        if (!books.contains(newBook)) {
-                            books.add(newBook);
-                            newSubscription.setBooks(books);
-                        }
+                        Subscription newSubscription = createSubscription(record, newBook);
                         entityManager.persist(newSubscription);
                         return newSubscription;
                     });
         });
+    }
+
+    private Subscription createSubscription(BookRecord record, Book book) {
+        Subscription newSubscription = new Subscription(record.getUserLogin(), record.getUserFullName(), record.getUserEmail(), record.isBorrowAllowed());
+        List<Book> books = newSubscription.getBooks();
+        if (books == null) {
+            books = new ArrayList<>();
+        }
+        if (!books.contains(book)) {
+            books.add(book);
+            newSubscription.setBooks(books);
+        }
+        return newSubscription;
     }
 
     private void saveAccountingBook(Book book, Subscription subscription, BookRecord record) {

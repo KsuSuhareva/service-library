@@ -22,7 +22,6 @@ import java.util.Map;
 @Configuration
 @RequiredArgsConstructor
 public class LibraryKafkaConfig {
-
     private final LibraryProperties properties;
 
     @Bean
@@ -32,14 +31,12 @@ public class LibraryKafkaConfig {
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+        props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
         props.put(ConsumerConfig.GROUP_ID_CONFIG, properties.getConsumerGroupId());
-
         props.put(ConsumerConfig.FETCH_MIN_BYTES_CONFIG, 50000);
         props.put(ConsumerConfig.FETCH_MAX_BYTES_CONFIG, 1048576);
         props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, properties.getBachSize());
         props.put(ConsumerConfig.FETCH_MAX_WAIT_MS_CONFIG, 5000);
-
-
         return props;
     }
 

@@ -53,7 +53,7 @@ notifications:
   cron: "0 0 9 * * *"
 
 bach:
-  size: 50
+  size: 100
 
 publish:
   record:

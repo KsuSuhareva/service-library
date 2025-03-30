@@ -48,4 +48,10 @@ public class AccountingBookServiceImplTest {
         assertEquals(savedAccountingBook.getSubscription().getBooks().get(0).getTitle(), bookRecord.getBookTitle());
     }
 
+    @Test
+    public void testFindOverdueBooks() {
+        List<AccountingBook> books = accountingBookService.findOverdueBooks();
+        assertThat(books).isNotNull();
+        assertThat(books).isNotEmpty();
+    }
 }
