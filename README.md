@@ -25,15 +25,13 @@ git clone https://github.com/your-repo/library-service.git
 cd library-service
 
 выполнить команду из корневого каталага docker-compose up
+Запусить в постмане
 
----
-
-
-##  Пример запросов
 - получать информацию об абонементах и взятых книгах
-http://localhost:8080/subscriptions?username=Suhareva Ksu
+GET http://localhost:8080/subscriptions?username=Suhareva Ksu
+
 -  загружать данные из журнала "О выданных книгах" 
-  http://localhost:8080/accountingbooks
+POST  http://localhost:8080/accountingbooks
 [
  {
     "userLogin": "john_doe",
