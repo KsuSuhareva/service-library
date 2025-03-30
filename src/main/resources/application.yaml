@@ -3,7 +3,7 @@ spring:
     name: library-service
 
   datasource:
-    url: jdbc:postgresql://localhost:6542/library
+    url: jdbc:postgresql://library-db:6542/library
     username: postgres
     password: postgres
     driver-class-name: org.postgresql.Driver

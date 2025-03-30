@@ -1,7 +1,25 @@
 services:
+  library:
+    image: 'library:latest'
+    build:
+      context: ./
+    ports:
+      - "9090:9090"
+    container_name: library
+    hostname: library
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://library-db:5432/library
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    depends_on:
+      - library-db
+      - kafka
+    restart: on-failure
+
   library-db:
     image: postgres:14-alpine
-    container_name: library
+    container_name: library-db
     ports:
       - "6542:5432"
     environment:
@@ -29,5 +47,5 @@ services:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
       KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1

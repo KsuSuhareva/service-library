@@ -39,11 +39,14 @@ spring:
   kafka:
     bootstrap-servers: localhost:9092
     consumer:
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
       group-id: library-group
       auto-offset-reset: earliest
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
     listener:
       missing-topics-fatal: false
 
@@ -54,12 +57,8 @@ notifications:
   cron: "0 0 9 * * *"
 
 bach:
-  size: 100
+  size: 20
 
-publish:
+queue:
   record:
-    topic: publish-record
-
-listen:
-  record:
-    topic: listen-record
+    topic: record-queue
