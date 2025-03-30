@@ -12,7 +12,6 @@ spring:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
       ddl-auto: update
-    show-sql: true
 
   liquibase:
     change-log: classpath:db.changelog/db.changelog-master.yaml
@@ -33,11 +32,14 @@ spring:
   kafka:
     bootstrap-servers: localhost:9092
     consumer:
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+          spring.json.trusted.packages: "*"
       group-id: library-group
       auto-offset-reset: earliest
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
     listener:
       missing-topics-fatal: false
 
@@ -54,6 +56,6 @@ publish:
   record:
     topic: publish-record
 
-listen:
-  record:
-    topic: listen-record
+#listen:
+#  record:
+#    topic: listen-record

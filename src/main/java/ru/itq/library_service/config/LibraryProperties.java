@@ -16,8 +16,8 @@ public class LibraryProperties {
     private String consumerGroupId;
     @Value("${publish.record.topic}")
     private String publishRecordTopic;
-    @Value("${listen.record.topic}")
-    private String listenRecordTopic;
+//    @Value("${listen.record.topic}")
+//    private String listenRecordTopic;
     @Value("${bach.size}")
     private String bachSize;
 }

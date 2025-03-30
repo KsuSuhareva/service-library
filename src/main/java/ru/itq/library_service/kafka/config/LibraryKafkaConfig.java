@@ -13,8 +13,10 @@ import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
+import org.springframework.kafka.listener.ContainerProperties;
 import ru.itq.library_service.config.LibraryProperties;
 import ru.itq.library_service.dto.BookRecord;
+import org.springframework.kafka.support.serializer.JsonDeserializer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,6 +24,7 @@ import java.util.Map;
 @Configuration
 @RequiredArgsConstructor
 public class LibraryKafkaConfig {
+
     private final LibraryProperties properties;
 
     @Bean
@@ -29,7 +32,7 @@ public class LibraryKafkaConfig {
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, properties.getBootstrapServers());
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
         props.put(ConsumerConfig.GROUP_ID_CONFIG, properties.getConsumerGroupId());
@@ -37,6 +40,8 @@ public class LibraryKafkaConfig {
         props.put(ConsumerConfig.FETCH_MAX_BYTES_CONFIG, 1048576);
         props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, properties.getBachSize());
         props.put(ConsumerConfig.FETCH_MAX_WAIT_MS_CONFIG, 5000);
+        props.put("spring.json.trusted.packages", "ru.itq.library_service.dto");
+        props.put("spring.json.value.default.type", "ru.itq.library_service.dto.BookRecord");
         return props;
     }
 
@@ -50,6 +55,7 @@ public class LibraryKafkaConfig {
         ConcurrentKafkaListenerContainerFactory<String, BookRecord> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
         factory.setBatchListener(true);
+        factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL);
         return factory;
     }
 
