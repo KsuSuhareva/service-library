@@ -25,4 +25,37 @@ git clone https://github.com/your-repo/library-service.git
 cd library-service
 
 выполнить команду из корневого каталага docker-compose up
+Запусить в постмане
+
+- получать информацию об абонементах и взятых книгах
+GET http://localhost:8080/subscriptions?username=Suhareva Ksu
+
+-  загружать данные из журнала "О выданных книгах" 
+POST  http://localhost:8080/accountingbooks
+[
+ {
+    "userLogin": "john_doe",
+    "userFullName": "John Doe",
+    "userEmail": "john.doe@example.com",
+    "borrowAllowed": true,
+    "bookTitle": "The Great Gatsby",
+    "bookAuthor": "F. Scott Fitzgerald",
+    "bookPublishedDate": "1925-04-10",
+    "borrowedDate": "2024-03-01",
+    "returnedDate": "2024-03-15"
+  },
+  {
+    "userLogin": "jane_smith",
+    "userFullName": "Jane Smith",
+    "userEmail": "jane.smith@example.com",
+    "borrowAllowed": false,
+    "bookTitle": "1984",
+    "bookAuthor": "George Orwell",
+    "bookPublishedDate": "1949-06-08",
+    "borrowedDate": "2024-02-15",
+    "returnedDate": null
+  }
+]
+
+
 
