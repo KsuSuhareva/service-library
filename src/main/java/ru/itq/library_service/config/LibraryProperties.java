@@ -18,4 +18,6 @@ public class LibraryProperties {
     private String queueRecordTopic;
     @Value("${bach.size}")
     private String bachSize;
+    @Value("${mail.from}")
+    private String mailFrom;
 }
