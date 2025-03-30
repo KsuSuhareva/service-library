@@ -31,7 +31,6 @@ public class LibraryKafkaPublisher {
             );
             record.headers().add(new RecordHeader("service-name", getBytes(properties.getServiceName())));
             kafkaTemplate.send(record);
-            log.info("Publish to kafka");
         } catch (Exception exception) {
             log.error("Error sending: ", exception);
             throw exception;

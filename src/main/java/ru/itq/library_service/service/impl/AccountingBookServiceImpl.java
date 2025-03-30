@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.itq.library_service.config.LibraryProperties;
 import ru.itq.library_service.dto.BookRecord;
@@ -22,6 +23,7 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AccountingBookServiceImpl implements AccountingBookService {
     private static final String FIND_BOOK_SQL = "SELECT b FROM Book b WHERE b.title = :title AND b.author = :author AND b.publishedDate = :publishedDate";
     private static final String FIND_SUBSCRIPTION_SQL = "SELECT s FROM Subscription s WHERE s.userFullName = :fullName";
@@ -41,6 +43,7 @@ public class AccountingBookServiceImpl implements AccountingBookService {
     public void publishToQueue(List<BookRecord> records) {
         records.parallelStream()
                 .forEach(record -> libraryPublisher.publish(record, properties.getQueueRecordTopic()));
+        log.info("Publish {} record", records.size());
     }
 
     @Override

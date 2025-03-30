@@ -50,7 +50,7 @@ notifications:
   cron: "0 0 9 * * *"
 
 bach:
-  size: 100
+  size: 20
 
 queue:
   record:
