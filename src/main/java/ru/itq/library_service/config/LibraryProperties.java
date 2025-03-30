@@ -14,10 +14,8 @@ public class LibraryProperties {
     private String bootstrapServers;
     @Value("${spring.kafka.consumer.group-id}")
     private String consumerGroupId;
-    @Value("${publish.record.topic}")
-    private String publishRecordTopic;
-//    @Value("${listen.record.topic}")
-//    private String listenRecordTopic;
+    @Value("${queue.record.topic}")
+    private String queueRecordTopic;
     @Value("${bach.size}")
     private String bachSize;
 }

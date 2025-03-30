@@ -17,7 +17,7 @@ public class LibraryKafkaListener {
     private final AccountingBookService accountingBookService;
 
     @KafkaListener(
-            topics = "${publish.record.topic}",
+            topics = "${queue.record.topic}",
             groupId = "${spring.kafka.consumer.group-id}",
             containerFactory = "kafkaListenerContainerFactory")
     public void listenBatchRecord(List<BookRecord> records, Acknowledgment acknowledgment) {

@@ -52,10 +52,6 @@ notifications:
 bach:
   size: 100
 
-publish:
+queue:
   record:
-    topic: publish-record
-
-#listen:
-#  record:
-#    topic: listen-record
+    topic: record-queue
