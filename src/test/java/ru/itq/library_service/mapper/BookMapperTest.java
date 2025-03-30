@@ -25,7 +25,7 @@ public class BookMapperTest {
     @Test
     void SubscriptionToSubscriptionDto() {
         Book book = new Book("Властелин колец", "Дж. Р. Р. Толкин",
-                LocalDate.of(1954, 6, 29).atStartOfDay());
+                LocalDate.of(1954, 6, 29));
 
         BookDto bookDto = bookMapper.bookToBookDto(book);
 

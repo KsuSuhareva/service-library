@@ -35,13 +35,11 @@ public class SubscriptionMapperTest {
     @Test
     void SubscriptionToSubscriptionDto() {
         List<Book> books = new ArrayList<>();
-        Book book = new Book("Властелин колец", "Дж. Р. Р. Толкин",
-                LocalDate.of(1954, 6, 29).atStartOfDay());
+        Book book = new Book("Властелин колец", "Дж. Р. Р. Толкин", LocalDate.of(1954, 6, 29));
         books.add(book);
         Subscription subscription = new Subscription(1l, "login", "Сухарева Ксения",
                 "k.sukhareva@itq-group.com", true, books);
-        BookDto bookDto = new BookDto("Властелин колец", "Дж. Р. Р. Толкин",
-                LocalDate.of(1954, 6, 29).atStartOfDay());
+        BookDto bookDto = new BookDto("Властелин колец", "Дж. Р. Р. Толкин", LocalDate.of(1954, 6, 29));
         when(bookMapper.bookToBookDto(book)).thenReturn(bookDto);
         SubscriptionDto subscriptionDto = subscriptionMapper.subscriptionToSubscriptionDto(subscription);
 

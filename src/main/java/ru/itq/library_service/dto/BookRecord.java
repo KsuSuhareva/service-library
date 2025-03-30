@@ -1,5 +1,6 @@
 package ru.itq.library_service.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,7 +9,6 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -29,8 +29,11 @@ public class BookRecord {
     @NotNull
     private String bookAuthor;
     @NotNull
-    private LocalDateTime bookPublishedDate;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate bookPublishedDate;
     @NotNull
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate borrowedDate;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate returnedDate;
 }

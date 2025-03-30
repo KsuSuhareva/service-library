@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -16,5 +16,5 @@ public class BookDto {
     private String title;
     private String author;
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDateTime publishedDate;
+    private LocalDate publishedDate;
 }

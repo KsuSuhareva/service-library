@@ -11,7 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "books")
@@ -32,9 +32,9 @@ public class Book {
     private String author;
 
     @Column(name = "published_date")
-    private LocalDateTime publishedDate;
+    private LocalDate publishedDate;
 
-    public Book(String title, String author, LocalDateTime publishedDate) {
+    public Book(String title, String author, LocalDate publishedDate) {
         this.title = title;
         this.author = author;
         this.publishedDate = publishedDate;
