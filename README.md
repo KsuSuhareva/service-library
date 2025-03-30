@@ -15,6 +15,7 @@ Library Service — это сервис для управления книгам
 - Apache Kafka
 - Lombok
 - Docker, Docker Compose
+- Mapstruct
 
 ---
 
