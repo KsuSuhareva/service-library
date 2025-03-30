@@ -4,7 +4,7 @@ services:
     build:
       context: ./
     ports:
-      - "9090:9090"
+      - "8080:8080"
     container_name: library
     hostname: library
     environment:
