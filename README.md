@@ -22,7 +22,7 @@ Library Service — это сервис для управления книгам
 ## ⚙️ Установка и запуск
 
 ```bash
-git clone https://github.com/your-repo/library-service.git
+git clone https://github.com/KsuSuhareva/service-library.git
 cd library-service
 
 выполнить команду из корневого каталага docker-compose up
