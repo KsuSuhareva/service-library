@@ -101,11 +101,13 @@ public class AccountingBookServiceImpl implements AccountingBookService {
     }
 
     private void updateSubscriptionWithBook(Subscription subscription, Book book) {
-        if (subscription.getBooks() == null) {
-            subscription.setBooks(new ArrayList<>());
+       List<Book> books = subscription.getBooks();
+        if (books == null) {
+           books = new ArrayList<>();
         }
-        if (!subscription.getBooks().contains(book)) {
-            subscription.getBooks().add(book);
+        if (!books.contains(book)) {
+            books.add(book);
+            subscription.setBooks(books);
         }
         entityManager.merge(subscription);
     }
