@@ -52,20 +52,17 @@ public class AccountingBookServiceImpl implements AccountingBookService {
         Map<String, Book> bookCache = new HashMap<>();
         Map<String, Subscription> subscriptionCache = new HashMap<>();
 
-        try {
-            for (BookRecord record : records) {
-                Book book = findBookFromCacheOrBase(record, bookCache);
-                Subscription subscription = findSubscriptionFromCacheOrBase(record, book, subscriptionCache);
-                saveAccountingBook(book, subscription);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        for (BookRecord record : records) {
+            Book book = findBookFromCacheOrBase(record, bookCache);
+            Subscription subscription = findSubscriptionFromCacheOrBase(record, book, subscriptionCache);
+            saveAccountingBook(book, subscription);
         }
         entityManager.flush();
         entityManager.clear();
 
         bookCache.clear();
         subscriptionCache.clear();
+        log.info("Successful bach");
     }
 
     private Book findBookFromCacheOrBase(BookRecord record, Map<String, Book> bookCache) {

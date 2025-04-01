@@ -27,8 +27,8 @@ spring:
   mail:
     host: mail.itq-group.com
     port: 587
-    username: chatbot@itq-group.com
-    password: tU4TfKCnvZ-NCC8xsHqzwC0-e
+    username: name
+    password: password
     properties:
       mail.smtp.auth: true
       mail.smtp.starttls.enable: true
