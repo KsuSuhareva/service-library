@@ -22,7 +22,7 @@ Library Service — это сервис для управления книгам
 ## ⚙️ Установка и запуск
 
 ```bash
-git clone https://github.com/your-repo/library-service.git
+git clone https://github.com/KsuSuhareva/service-library.git
 cd library-service
 
 выполнить команду из корневого каталага docker-compose up
@@ -33,30 +33,38 @@ GET http://localhost:8080/subscriptions?username=Suhareva Ksu
 
 -  загружать данные из журнала "О выданных книгах" 
 POST  http://localhost:8080/accountingbooks
-[
- {
-    "userLogin": "john_doe",
-    "userFullName": "John Doe",
-    "userEmail": "john.doe@example.com",
-    "borrowAllowed": true,
-    "bookTitle": "The Great Gatsby",
-    "bookAuthor": "F. Scott Fitzgerald",
-    "bookPublishedDate": "1925-04-10",
-    "borrowedDate": "2024-03-01",
-    "returnedDate": "2024-03-15"
-  },
-  {
-    "userLogin": "jane_smith",
-    "userFullName": "Jane Smith",
-    "userEmail": "jane.smith@example.com",
-    "borrowAllowed": false,
-    "bookTitle": "1984",
-    "bookAuthor": "George Orwell",
-    "bookPublishedDate": "1949-06-08",
-    "borrowedDate": "2024-02-15",
-    "returnedDate": null
-  }
-]
+{
+    "data": [
+        {
+            "username": "sukhareva",
+            "userFullName": "Suhareva Ksu",
+            "userActive": true,
+            "bookName": "War and Peace",
+            "bookAuthor": "Leo Tolstoy"
+        },
+        {
+            "username": "maria_ivanova",
+            "userFullName": "Maria Ivanova",
+            "userActive": false,
+            "bookName": "1984",
+            "bookAuthor": "George Orwell"
+        },
+        {
+            "username": "sukhareva",
+            "userFullName": "Suhareva Ksu",
+            "userActive": false,
+            "bookName": "New Book",
+            "bookAuthor": "George Orwell"
+        },
+        {
+            "username": "sergey_smirnov",
+            "userFullName": "Sergey Smirnov",
+            "userActive": true,
+            "bookName": "Crime and Punishment",
+            "bookAuthor": "Fyodor Dostoevsky"
+        }
+    ]
+}
 
 
 
