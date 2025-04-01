@@ -32,11 +32,6 @@ public class Book {
     @Column(name = "book_author")
     private String bookAuthor;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "subscription_id")
-    private Subscription subscription;
-
-
     public Book(String bookName, String bookAuthor) {
         this.bookName = bookName;
         this.bookAuthor = bookAuthor;

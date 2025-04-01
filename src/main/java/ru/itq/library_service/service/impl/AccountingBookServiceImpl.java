@@ -18,7 +18,6 @@ import ru.itq.library_service.service.AccountingBookService;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,7 +26,7 @@ import java.util.Map;
 @Slf4j
 public class AccountingBookServiceImpl implements AccountingBookService {
     private static final String FIND_BOOK_SQL = "SELECT b FROM Book b WHERE b.bookName  = :bookName AND b.bookAuthor = :bookAuthor";
-    private static final String FIND_SUBSCRIPTION_SQL = "SELECT s FROM Subscription s LEFT JOIN FETCH s.books WHERE s.userFullName = :fullName";
+    private static final String FIND_SUBSCRIPTION_SQL = "SELECT s FROM Subscription s JOIN FETCH s.books WHERE s.userFullName = :fullName";
     private static final Integer ALLOWED_PERIOD_DAYS = 20;
     private final LibraryProperties properties;
     private final AccountingBookRepository accountingBookRepository;
@@ -53,14 +52,17 @@ public class AccountingBookServiceImpl implements AccountingBookService {
         Map<String, Book> bookCache = new HashMap<>();
         Map<String, Subscription> subscriptionCache = new HashMap<>();
 
-        for (BookRecord record : records) {
-            Book book = findBookFromCacheOrBase(record, bookCache);
-            Subscription subscription = findSubscriptionFromCacheOrBase(record, book, subscriptionCache);
-            saveAccountingBook(book, subscription);
+        try {
+            for (BookRecord record : records) {
+                Book book = findBookFromCacheOrBase(record, bookCache);
+                Subscription subscription = findSubscriptionFromCacheOrBase(record, book, subscriptionCache);
+                saveAccountingBook(book, subscription);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         entityManager.flush();
         entityManager.clear();
-
 
         bookCache.clear();
         subscriptionCache.clear();
@@ -84,8 +86,8 @@ public class AccountingBookServiceImpl implements AccountingBookService {
 
 
     private Subscription findSubscriptionFromCacheOrBase(BookRecord record, Book newBook, Map<String, Subscription> subscriptionCache) {
-        return subscriptionCache.computeIfAbsent(record.getUserFullName(), fullName -> {
-            Subscription subscription = entityManager.createQuery(FIND_SUBSCRIPTION_SQL, Subscription.class)
+        Subscription subscription = subscriptionCache.computeIfAbsent(record.getUserFullName(), fullName -> {
+            return entityManager.createQuery(FIND_SUBSCRIPTION_SQL, Subscription.class)
                     .setParameter("fullName", fullName)
                     .setMaxResults(1)
                     .getResultStream()
@@ -95,9 +97,8 @@ public class AccountingBookServiceImpl implements AccountingBookService {
                         entityManager.persist(newSubscription);
                         return newSubscription;
                     });
-
-            return updateSubscriptionWithBook(subscription, newBook);
         });
+        return updateSubscriptionWithBook(subscription, newBook);
     }
 
     private Subscription updateSubscriptionWithBook(Subscription subscription, Book book) {
@@ -105,13 +106,11 @@ public class AccountingBookServiceImpl implements AccountingBookService {
         if (books == null) {
             books = new ArrayList<>();
         }
-        book.setSubscription(subscription);
-        book = entityManager.merge(book);
         if (!books.contains(book)) {
             books.add(book);
         }
         subscription.setBooks(books);
-       return entityManager.merge(subscription);
+        return entityManager.merge(subscription);
     }
 
     private void saveAccountingBook(Book book, Subscription subscription) {
