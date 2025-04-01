@@ -36,8 +36,8 @@ POST  http://localhost:8080/accountingbooks
 {
     "data": [
         {
-            "username": "ivan_petrov",
-            "userFullName": "Ivan Petrov",
+            "username": "sukhareva",
+            "userFullName": "Suhareva Ksu",
             "userActive": true,
             "bookName": "War and Peace",
             "bookAuthor": "Leo Tolstoy"
@@ -47,6 +47,13 @@ POST  http://localhost:8080/accountingbooks
             "userFullName": "Maria Ivanova",
             "userActive": false,
             "bookName": "1984",
+            "bookAuthor": "George Orwell"
+        },
+        {
+            "username": "sukhareva",
+            "userFullName": "Suhareva Ksu",
+            "userActive": false,
+            "bookName": "New Book",
             "bookAuthor": "George Orwell"
         },
         {
