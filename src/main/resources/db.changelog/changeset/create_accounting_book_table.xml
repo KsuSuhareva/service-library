@@ -18,9 +18,7 @@
                 <constraints nullable="false" foreignKeyName="fk_borrowed_book"
                              referencedTableName="books" referencedColumnNames="book_id"/>
             </column>
-            <column name="borrowed_date" type="date">
-                <constraints nullable="false"/>
-            </column>
+            <column name="borrowed_date" type="date"/>
             <column name="returned_date" type="date"/>
         </createTable>
     </changeSet>
