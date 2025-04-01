@@ -1,6 +1,5 @@
 package ru.itq.library_service.model.entity;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -14,9 +13,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "subscriptions")
@@ -50,5 +49,18 @@ public class Subscription {
         this.userName = userName;
         this.userFullName = userFullName;
         this.userActive = userActive;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Subscription that = (Subscription) o;
+        return Objects.equals(id, that.id) && Objects.equals(userFullName, that.userFullName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, userFullName);
     }
 }
