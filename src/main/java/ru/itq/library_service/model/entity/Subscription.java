@@ -24,7 +24,6 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 public class Subscription {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

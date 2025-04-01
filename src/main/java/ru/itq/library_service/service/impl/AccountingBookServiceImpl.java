@@ -18,6 +18,7 @@ import ru.itq.library_service.service.AccountingBookService;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -41,8 +42,8 @@ public class AccountingBookServiceImpl implements AccountingBookService {
 
     @Override
     public void publishToQueue(List<BookRecord> records) {
-        records.parallelStream()
-                .forEach(record -> libraryPublisher.publish(record, properties.getQueueRecordTopic()));
+        records.stream()
+                .forEach(record -> libraryPublisher.publish(record, "push-record", properties.getQueueRecordTopic()));
         log.info("Publish {} record", records.size());
     }
 
@@ -55,10 +56,11 @@ public class AccountingBookServiceImpl implements AccountingBookService {
         for (BookRecord record : records) {
             Book book = findBookFromCacheOrBase(record, bookCache);
             Subscription subscription = findSubscriptionFromCacheOrBase(record, book, subscriptionCache);
-            saveAccountingBook(book, subscription, record);
+            saveAccountingBook(book, subscription);
         }
         entityManager.flush();
         entityManager.clear();
+
 
         bookCache.clear();
         subscriptionCache.clear();
@@ -75,7 +77,6 @@ public class AccountingBookServiceImpl implements AccountingBookService {
                     .orElseGet(() -> {
                         Book newBook = new Book(record.getBookName(), record.getBookAuthor());
                         entityManager.persist(newBook);
-                        log.info("NEW - " + newBook);
                         return newBook;
                     });
         });
@@ -95,24 +96,25 @@ public class AccountingBookServiceImpl implements AccountingBookService {
                         return newSubscription;
                     });
 
-            updateSubscriptionWithBook(subscription, newBook);
-            return subscription;
+            return updateSubscriptionWithBook(subscription, newBook);
         });
     }
 
-    private void updateSubscriptionWithBook(Subscription subscription, Book book) {
-       List<Book> books = subscription.getBooks();
+    private Subscription updateSubscriptionWithBook(Subscription subscription, Book book) {
+        List<Book> books = subscription.getBooks();
         if (books == null) {
-           books = new ArrayList<>();
+            books = new ArrayList<>();
         }
+        book.setSubscription(subscription);
+        book = entityManager.merge(book);
         if (!books.contains(book)) {
             books.add(book);
-            subscription.setBooks(books);
         }
-        entityManager.merge(subscription);
+        subscription.setBooks(books);
+       return entityManager.merge(subscription);
     }
 
-    private void saveAccountingBook(Book book, Subscription subscription, BookRecord record) {
+    private void saveAccountingBook(Book book, Subscription subscription) {
         AccountingBook accountingBook = new AccountingBook(subscription, book);
         entityManager.persist(accountingBook);
     }

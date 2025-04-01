@@ -56,6 +56,7 @@ public class LibraryKafkaConfig {
         factory.setConsumerFactory(consumerFactory());
         factory.setBatchListener(true);
         factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL);
+        factory.setConcurrency(1);
         return factory;
     }
 
@@ -65,6 +66,7 @@ public class LibraryKafkaConfig {
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, properties.getBootstrapServers());
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        props.put(ProducerConfig.PARTITIONER_CLASS_CONFIG, org.apache.kafka.clients.producer.internals.DefaultPartitioner.class);
         return new DefaultKafkaProducerFactory<>(props);
     }
 

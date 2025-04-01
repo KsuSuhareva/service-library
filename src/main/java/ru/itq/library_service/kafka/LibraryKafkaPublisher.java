@@ -22,11 +22,11 @@ public class LibraryKafkaPublisher {
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final ObjectMapper objectMapper;
 
-    public void publish(Object message, String topicName) {
+    public void publish(Object message, String key, String topicName) {
         try {
             ProducerRecord<String, String> record = new ProducerRecord<>(
                     topicName,
-                    UUID.randomUUID().toString(),
+                    key,
                     getJson(message)
             );
             record.headers().add(new RecordHeader("service-name", getBytes(properties.getServiceName())));
