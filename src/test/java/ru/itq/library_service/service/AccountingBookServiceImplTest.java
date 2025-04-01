@@ -28,20 +28,18 @@ public class AccountingBookServiceImplTest extends WithContext {
     @Transactional
     public void testSaveOrUpdateBatch() {
         BookRecord bookRecord = new BookRecord(
-                "Suhareva", "Сухарева Ксения Владимировна", "sukhareva@itq-group.com", true,
-                "Властелин колец", "Дж. Р. Р. Толкин", LocalDate.now(), LocalDate.now(), null
-        );
+                "Suhareva", "Сухарева Ксения Владимировна", true,
+                "Властелин колец", "Дж. Р. Р. Толкин");
 
         accountingBookService.saveOrUpdateBatch(List.of(bookRecord));
         List<AccountingBook> accountingBooks = accountingBookRepository.findAll();
 
         AccountingBook savedAccountingBook = accountingBooks.get(4);
         assertThat(savedAccountingBook).isNotNull();
-        assertEquals(savedAccountingBook.getBook().getTitle(), bookRecord.getBookTitle());
-        assertEquals(savedAccountingBook.getBook().getAuthor(), bookRecord.getBookAuthor());
+        assertEquals(savedAccountingBook.getBook().getBookName(), bookRecord.getBookName());
+        assertEquals(savedAccountingBook.getBook().getBookAuthor(), bookRecord.getBookAuthor());
         assertThat(savedAccountingBook.getSubscription()).isNotNull();
         assertEquals(savedAccountingBook.getSubscription().getUserFullName(), bookRecord.getUserFullName());
-        assertEquals(savedAccountingBook.getSubscription().getBooks().get(0).getTitle(), bookRecord.getBookTitle());
     }
 
     @Test

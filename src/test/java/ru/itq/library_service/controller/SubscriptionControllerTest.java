@@ -22,7 +22,7 @@ public class SubscriptionControllerTest extends WithContext {
                         .param("username", userFullName))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.userFullName").value(userFullName))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.userEmail").value("k.sukhareva@itq-group.com"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.userName").value("sukhareva"));
     }
 
     @Test

@@ -42,10 +42,8 @@ public class AccountingBook {
     @Column(name = "returned_date")
     private LocalDate returnedDate;
 
-    public AccountingBook(Subscription subscription, Book book, LocalDate borrowedDate, LocalDate returnedDate) {
+    public AccountingBook(Subscription subscription, Book book) {
         this.subscription = subscription;
         this.book = book;
-        this.borrowedDate = borrowedDate;
-        this.returnedDate = returnedDate;
     }
 }

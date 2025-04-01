@@ -2,16 +2,18 @@ package ru.itq.library_service.model.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.time.LocalDate;
+import lombok.ToString;
 
 @Entity
 @Table(name = "books")
@@ -19,24 +21,26 @@ import java.time.LocalDate;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "book_id", nullable = false)
     private Long id;
 
-    @Column(name = "title")
-    private String title;
+    @Column(name = "book_name")
+    private String bookName;
 
-    @Column(name = "author")
-    private String author;
+    @Column(name = "book_author")
+    private String bookAuthor;
 
-    @Column(name = "published_date")
-    private LocalDate publishedDate;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "subscription_id")
+    private Subscription subscription;
 
-    public Book(String title, String author, LocalDate publishedDate) {
-        this.title = title;
-        this.author = author;
-        this.publishedDate = publishedDate;
+
+    public Book(String bookName, String bookAuthor) {
+        this.bookName = bookName;
+        this.bookAuthor = bookAuthor;
     }
 }

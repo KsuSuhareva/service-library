@@ -4,9 +4,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.itq.library_service.config.WithContext;
+import ru.itq.library_service.dto.AccountingBookData;
 import ru.itq.library_service.dto.BookRecord;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,16 +17,15 @@ class AccountingBookControllerTest extends WithContext {
     @Test
     void testPublishToQueue() throws Exception {
         List<BookRecord> records = new ArrayList<>();
-        records.add(new BookRecord("Suhareva", "Сухарева Ксения Владимировна", "k.sukhareva@itq-group.com",
-                true, "Властелин колец", "Дж. Р. Р. Толкин", LocalDate.of(1954, 6, 29),
-                LocalDate.of(2025, 3, 30), null));
-        records.add(new BookRecord("Petrov", "Петров Петр Петрович", "p.petrov@itq-group.com",
-                true, "Властелин колец", "Дж. Р. Р. Толкин", LocalDate.of(1954, 6, 29),
-                LocalDate.of(2024, 3, 30), LocalDate.of(2024, 4, 15)));
+        records.add(new BookRecord("Suhareva", "Сухарева Ксения Владимировна", true,
+                "Властелин колец", "Дж. Р. Р. Толкин"));
+        records.add(new BookRecord("Petrov", "Петров Петр Петрович", true,
+                "Властелин колец", "Дж. Р. Р. Толкин"));
+        AccountingBookData accountingBookData = new AccountingBookData(records);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/accountingbooks")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(records)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(accountingBookData)))
                 .andExpect(status().isOk());
     }
 }

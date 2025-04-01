@@ -1,6 +1,7 @@
 package ru.itq.library_service.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,9 +13,8 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class SubscriptionDto {
-    private String userName;
-    private String userFullName;
-    private boolean userActive;
-    private List<BookDto> books;
+public class AccountingBookData {
+    @NotBlank
+    @JsonProperty("data")
+    private List<BookRecord> bookRecords;
 }

@@ -10,10 +10,10 @@
             <column name="book_id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="title" type="varchar(255)">
+            <column name="book_name" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="author" type="varchar(255)">
+            <column name="book_author" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
             <column name="published_date" type="timestamp"/>

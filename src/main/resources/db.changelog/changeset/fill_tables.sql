@@ -1,15 +1,15 @@
-INSERT INTO subscriptions (user_login, user_full_name, user_email, borrow_allowed)
+INSERT INTO subscriptions (user_name, user_full_name, user_email, user_active)
 VALUES
 ('sukhareva', 'Suhareva Ksu', 'k.sukhareva@itq-group.com', true),
 ('jane_smith', 'Jane Smith', 'jane.smith@example.com', true),
 ('michael_jones', 'Michael Jones', 'michael.jones@example.com', false);
 
-INSERT INTO books (title, author, published_date, subscription_id)
+INSERT INTO books (book_name, book_author, subscription_id)
 VALUES
-('The Catcher in the Rye', 'J.D. Salinger', '1951-07-16', 1),
-('To Kill a Mockingbird', 'Harper Lee', '1960-07-11', 1),
-('1984', 'George Orwell', '1949-06-08', 2),
-('Pride and Prejudice', 'Jane Austen', '1813-01-28', null);
+('The Catcher in the Rye', 'J.D. Salinger', 1),
+('To Kill a Mockingbird', 'Harper Lee', 1),
+('1984', 'George Orwell', 2),
+('Pride and Prejudice', 'Jane Austen', null);
 
 INSERT INTO accounting_books (subscription_id, book_id, borrowed_date, returned_date)
 VALUES

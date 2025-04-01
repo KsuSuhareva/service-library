@@ -10,16 +10,14 @@
             <column name="subscription_id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="user_login" type="varchar(255)">
-                <constraints nullable="false" unique="true"/>
+            <column name="user_name" type="varchar(255)">
+                <constraints nullable="false"/>
             </column>
             <column name="user_full_name" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="user_email" type="varchar(255)">
-                <constraints nullable="false" unique="true"/>
-            </column>
-            <column name="borrow_allowed" type="boolean" defaultValueBoolean="true">
+            <column name="user_email" type="varchar(255)"/>
+            <column name="user_active" type="boolean" defaultValueBoolean="true">
                 <constraints nullable="false"/>
             </column>
         </createTable>

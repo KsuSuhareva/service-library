@@ -24,14 +24,12 @@ public class BookMapperTest {
 
     @Test
     void SubscriptionToSubscriptionDto() {
-        Book book = new Book("Властелин колец", "Дж. Р. Р. Толкин",
-                LocalDate.of(1954, 6, 29));
+        Book book = new Book("Властелин колец", "Дж. Р. Р. Толкин");
 
         BookDto bookDto = bookMapper.bookToBookDto(book);
 
-        assertEquals(bookDto.getTitle(), book.getTitle());
-        assertEquals(bookDto.getAuthor(), book.getAuthor());
-        assertEquals(bookDto.getPublishedDate(), book.getPublishedDate());
+        assertEquals(bookDto.getBookName(), book.getBookName());
+        assertEquals(bookDto.getBookAuthor(), book.getBookAuthor());
     }
 
 }

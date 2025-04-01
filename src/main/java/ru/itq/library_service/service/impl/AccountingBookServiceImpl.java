@@ -25,8 +25,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Slf4j
 public class AccountingBookServiceImpl implements AccountingBookService {
-    private static final String FIND_BOOK_SQL = "SELECT b FROM Book b WHERE b.title = :title AND b.author = :author AND b.publishedDate = :publishedDate";
-    private static final String FIND_SUBSCRIPTION_SQL = "SELECT s FROM Subscription s WHERE s.userFullName = :fullName";
+    private static final String FIND_BOOK_SQL = "SELECT b FROM Book b WHERE b.bookName  = :bookName AND b.bookAuthor = :bookAuthor";
+    private static final String FIND_SUBSCRIPTION_SQL = "SELECT s FROM Subscription s LEFT JOIN FETCH s.books WHERE s.userFullName = :fullName";
     private static final Integer ALLOWED_PERIOD_DAYS = 20;
     private final LibraryProperties properties;
     private final AccountingBookRepository accountingBookRepository;
@@ -65,17 +65,17 @@ public class AccountingBookServiceImpl implements AccountingBookService {
     }
 
     private Book findBookFromCacheOrBase(BookRecord record, Map<String, Book> bookCache) {
-        return bookCache.computeIfAbsent(record.getBookTitle(), title -> {
+        return bookCache.computeIfAbsent(record.getBookName(), bookName -> {
             return entityManager.createQuery(FIND_BOOK_SQL, Book.class)
-                    .setParameter("title", record.getBookTitle())
-                    .setParameter("author", record.getBookAuthor())
-                    .setParameter("publishedDate", record.getBookPublishedDate())
+                    .setParameter("bookName", record.getBookName())
+                    .setParameter("bookAuthor", record.getBookAuthor())
                     .setMaxResults(1)
                     .getResultStream()
                     .findFirst()
                     .orElseGet(() -> {
-                        Book newBook = new Book(record.getBookTitle(), record.getBookAuthor(), record.getBookPublishedDate());
+                        Book newBook = new Book(record.getBookName(), record.getBookAuthor());
                         entityManager.persist(newBook);
+                        log.info("NEW - " + newBook);
                         return newBook;
                     });
         });
@@ -83,35 +83,35 @@ public class AccountingBookServiceImpl implements AccountingBookService {
 
 
     private Subscription findSubscriptionFromCacheOrBase(BookRecord record, Book newBook, Map<String, Subscription> subscriptionCache) {
-        return subscriptionCache.computeIfAbsent(record.getUserFullName(), login -> {
-            return entityManager.createQuery(FIND_SUBSCRIPTION_SQL, Subscription.class)
-                    .setParameter("fullName", record.getUserFullName())
+        return subscriptionCache.computeIfAbsent(record.getUserFullName(), fullName -> {
+            Subscription subscription = entityManager.createQuery(FIND_SUBSCRIPTION_SQL, Subscription.class)
+                    .setParameter("fullName", fullName)
                     .setMaxResults(1)
                     .getResultStream()
                     .findFirst()
                     .orElseGet(() -> {
-                        Subscription newSubscription = createSubscription(record, newBook);
+                        Subscription newSubscription = new Subscription(record.getUserName(), record.getUserFullName(), record.isUserActive());
                         entityManager.persist(newSubscription);
                         return newSubscription;
                     });
+
+            updateSubscriptionWithBook(subscription, newBook);
+            return subscription;
         });
     }
 
-    private Subscription createSubscription(BookRecord record, Book book) {
-        Subscription newSubscription = new Subscription(record.getUserLogin(), record.getUserFullName(), record.getUserEmail(), record.isBorrowAllowed());
-        List<Book> books = newSubscription.getBooks();
-        if (books == null) {
-            books = new ArrayList<>();
+    private void updateSubscriptionWithBook(Subscription subscription, Book book) {
+        if (subscription.getBooks() == null) {
+            subscription.setBooks(new ArrayList<>());
         }
-        if (!books.contains(book)) {
-            books.add(book);
-            newSubscription.setBooks(books);
+        if (!subscription.getBooks().contains(book)) {
+            subscription.getBooks().add(book);
         }
-        return newSubscription;
+        entityManager.merge(subscription);
     }
 
     private void saveAccountingBook(Book book, Subscription subscription, BookRecord record) {
-        AccountingBook accountingBook = new AccountingBook(subscription, book, record.getBorrowedDate(), record.getReturnedDate());
+        AccountingBook accountingBook = new AccountingBook(subscription, book);
         entityManager.persist(accountingBook);
     }
 }
